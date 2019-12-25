@@ -1,8 +1,10 @@
 FROM alpine:latest AS builder
 ARG VAULT_VERSION=1.3.0
 ENV VAULT_VERSION ${VAULT_VERSION}
-RUN mkdir /vault 
-RUN apk --no-cache add bash ca-certificates wget
+RUN mkdir /vault
+RUN apk update \
+    && apk add bash ca-certificates wget jq \
+    && rm -rf /var/cache/apk/*
 
 FROM builder AS preVault
 RUN wget --quiet --output-document=/tmp/vault.zip \
@@ -17,8 +19,5 @@ ENV PATH="PATH=$PATH:$PWD/vault"
 
 FROM preVault AS VAULT
 COPY ./config/vault-conf.json /vault/config/vault-conf.json
-#VOLUME /vault/logs
-#VOLUME /vault/config
-#VOLUME /vault/file
 EXPOSE 8200
 ENTRYPOINT [ "vault" ]
