@@ -4,4 +4,4 @@ Inside the container, run this command:
 vault operator init
 ```
 You should get keys like that:
-![Screen](pictures/unsealing.png)
+![Screen](pictures/unsealing.PNG)
