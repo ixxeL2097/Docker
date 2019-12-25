@@ -17,7 +17,7 @@ services:
     - DOMAIN=fredcorp.fr
     - HOST_FQDN=vault.fredcorp.fr
     volumes:
-    - ./volumes/logs:/vault/logs:ro
+    - ./volumes/logs:/vault/logs:rw
     - ./volumes/config:/vault/config:rw #comment this line if using dockerFile configuration as conf file is populated inside container
     - ./volumes/file:/vault/file:rw
     - ./volumes/file:/vault/policies:rw
