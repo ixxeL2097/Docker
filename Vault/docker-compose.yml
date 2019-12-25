@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  vault:
+    #image: vault
+    build:
+      context: .
+      dockerfile: vault.dockerfile
+    container_name: vault
+    restart: always
+    ports:
+    - 8200:8200/tcp
+    environment:
+    #- VAULT_DEV_ROOT_TOKEN_ID=root
+    - VAULT_ADDR=http://127.0.0.1:8200
+    - NAME=fredcorp
+    - DOMAIN=fredcorp.fr
+    - HOST_FQDN=vault.fredcorp.fr
+    volumes:
+    - ./volumes/logs:/vault/logs:ro
+    - ./volumes/config:/vault/config:rw #comment this line if using dockerFile configuration as conf file is populated inside container
+    - ./volumes/file:/vault/file:rw
+    - ./volumes/file:/vault/policies:rw
+    cap_add:
+    - IPC_LOCK
+    command: server -config=/vault/config/vault-conf.json
