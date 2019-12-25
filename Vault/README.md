@@ -20,3 +20,7 @@ You can now authenticate using thee root token and this command :
 ```bash
 vault login
 ```
+You can enable logs by entering the following command :
+```bash
+vault audit enable file file_path=/vault/logs/audit.log
+```
