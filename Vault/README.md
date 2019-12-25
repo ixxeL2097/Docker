@@ -15,3 +15,8 @@ vault operator unseal
 Once done, you should see the sealed line as false :
 
 ![Screen](pictures/unsealed.PNG)
+
+You can now authenticate using thee root token and this command :
+```bash
+vault login
+```
