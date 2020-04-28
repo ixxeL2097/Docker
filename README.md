@@ -1,6 +1,6 @@
 # Docker
 General repo for docker scripts
 
-## 1. [Installation](./documentation/install-docker.md)
+## 1. [Installation](./resources/documentation/install-docker.md)
 
-## 1. [Documentation](./documentation/docker-CLI.md)
+## 1. [Documentation](./resources/documentation/docker-CLI.md)
