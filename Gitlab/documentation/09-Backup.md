@@ -3,7 +3,7 @@
 ## 9. Backup
 ### Overview
 
-It is recommended to keep a copy of ```/etc/gitlab```, or at least of ```/etc/gitlab/gitlab-secrets.json```, in a safe place. If you ever need to restore a GitLab application backup you need to also restore ```gitlab-secrets.json```. If you do not, GitLab users who are using two-factor authentication will lose access to your GitLab server and ‘secure variables’ stored in GitLab CI will be lost.
+It is recommended to keep a copy of ```/etc/gitlab```, or at least of ```/etc/gitlab/gitlab-secrets.json```, in a safe place. ```/etc/gitlab/gitlab-secrets.json``` file contains the **database encryption key**, **CI/CD variables**, and variables used for **two-factor authentication**. If you fail to restore this encryption key file along with the application data backup, users with two-factor authentication enabled and GitLab Runners will lose access to your GitLab server.
 
 It is not recommended to store your configuration backup in the same place as your application data backup, see below.
 
@@ -87,32 +87,50 @@ graph LR
 
 
 
+### Restore
 
+This procedure assumes that:
 
+ - You have installed the **exact same version and type (CE/EE)** of GitLab Omnibus with which the backup was created.
+ - You have run ```sudo gitlab-ctl reconfigure``` at least once.
+ - GitLab is running. If not, start it using ```sudo gitlab-ctl start```.
 
-Pour restaurer, suivre cette procédure:
-```bash
-# Renommer l'existant /etc/gitlab
-sudo mv /etc/gitlab /etc/gitlab.$(date +%s)
-sudo tar -xf gitlab_config_1487687824_2017_02_21.tar -C /
+First make sure your backup tar file is in the backup directory described in the ```gitlab.rb``` configuration ```gitlab_rails['backup_path']```. The default is ```/var/opt/gitlab/backups```. It needs to be owned by the ```git``` user.
+
+for example:
+
 ```
-Penser à exécuter cette commande après la restauration d'une configuration backup:
-```bash
- sudo gitlab-ctl reconfigure
+sudo cp 11493107454_2018_04_25_10.6.4-ce_gitlab_backup.tar /var/opt/gitlab/backups/
+sudo chown git.git /var/opt/gitlab/backups/11493107454_2018_04_25_10.6.4-ce_gitlab_backup.tar
 ```
-Les SSh host keys de la machine sont stockées dans un répertoire différent _**'/etc/ssh'**_. Assurez-vous d'aussi restaurer ces clefs pour éviter des attaques de type man-in-the-middle.
 
-### Backup applicatif
-Pour créer un backup des repos et des metadatas Gitlab, suivre la documentation sur ce lien:
+Stop the processes that are connected to the database. Leave the rest of GitLab running:
 
-https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system
-
-Les backups seront stockés dans _**'/var/opt/gitlab/backups'**_.
-
-Si vous souhaitez sstocker les backups Gitlab dans un répertoire différent, ajoutez le paramètre suivant à _**'/etc/gitlab/gitlab.rb'**_ et exécutez **sudo gitlab-ctl reconfigure**:
-```bash
-gitlab_rails['backup_path'] = '/mnt/backups'
 ```
+sudo gitlab-ctl stop unicorn
+sudo gitlab-ctl stop puma
+sudo gitlab-ctl stop sidekiq
+# Verify
+sudo gitlab-ctl status
+```
+
+Next, restore the backup, specifying the timestamp of the backup you wish to restore:
+
+```
+# This command will overwrite the contents of your GitLab database!
+sudo gitlab-backup restore BACKUP=1493107454_2018_04_25_10.6.4-ce
+```
+
+Next, restore ```/etc/gitlab/gitlab-secrets.json``` if necessary as mentioned above.
+
+Reconfigure, restart and check GitLab:
+
+```
+sudo gitlab-ctl reconfigure
+sudo gitlab-ctl restart
+sudo gitlab-rake gitlab:check SANITIZE=true
+```
+
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
