@@ -58,6 +58,7 @@ function check_gitlabSecretBackup ()
   fi
 }
 
+# This function checks if only one file is actually stored in the given directory
 function check_oneFile ()
 {
   echo "[CHECKING] > Only 1 file in $1..."
@@ -83,6 +84,7 @@ function check_FileMatchToday ()
   fi
 }
 
+# This function move all files from one directory to another
 function move_backupsToDir ()
 {
   echo "[PROCESSING] > Moving $1 tarball to $2 archive directory..."
@@ -90,6 +92,7 @@ function move_backupsToDir ()
   echo "> [DONE]"
 }
 
+# This function recursively set permissions to all files in a directory
 function set_permissions ()
 {
   echo "[PROCESSING] > Setting proper permissions on $1 tarball files..."
@@ -97,10 +100,11 @@ function set_permissions ()
   echo "> [DONE]"
 }
 
+# This function check if number of backups found in a given directory is greater than the amount we want to keep and then calculate the allowed amount to delete
 function check_enoughBackup ()
 {
   echo "[CHECKING] > Required number of backup files..."
-  totalBackup=$(find $1* -maxdepth 1 -type f  2> /dev/null | wc -l)
+  totalBackup=$(find $1 -maxdepth 1 -type f  2> /dev/null | wc -l)
   if [[ $totalBackup -gt $keepBackup ]]; then
     echo "[OK] >>> more than $keepBackup backup files found"
     deleteBackup=$((totalBackup-keepBackup))
@@ -112,6 +116,7 @@ function check_enoughBackup ()
   fi
 }
 
+# This function delete old backups based on retention and allowed amount to delete
 function delete_oldBackups()
 {
   echo "[PROCESSING] > deleting old backups..."
@@ -164,77 +169,3 @@ fi
 echo "[ENDING] > SCRIPT IS ENDING SUCCESSFULLY $(date +%d-%m-%Y_%H:%M:%S)"
 
 #####################################################################################
-
-
-
-# echo "[CHECKING] > Gitlab container is running..."
-# if [[ $(docker ps --filter name=$containerName --format '{{.Names}}') == $containerName ]]; then
-#   echo "[OK] >>> gitlab is running"
-#   echo "[PROCESSING] > Creating APP DATA gitlab backup..."
-#   set -x
-#   docker exec $containerName gitlab-backup
-#   set +x
-#   echo "> [DONE]"
-#   echo "[PROCESSING] > Creating SECRETS DATA gitlab backup..."
-#   set -x
-#   docker exec $containerName /bin/sh -c 'umask 0077; tar cfz /secret/gitlab/backups/$(date "+etc-gitlab-\%s.tgz") -C / etc/gitlab'
-#   set +x
-#   echo "> [DONE]"
-# else
-#   echo "[ERROR] >>> gitlab is NOT running"
-#   exit 1
-# fi
-
-# echo "[CHECKING] > Backup file was created..."
-# if [ -f $sourceAppDir*ee_gitlab_backup.tar ]; then
-#   echo "[OK] >>> gitlab backup tar file found"
- 
- 
-#   echo "[CHECKING] > Backup file is timestamped today..."
-#   if [[ $(find $sourceAppDir -maxdepth 1 -type f -print0 | xargs -0 -n1 basename | wc -l) -eq 1 ]]; then
-#     backupTarball=$(find $sourceAppDir -maxdepth 1 -type f -print0 | xargs -0 -n1 basename)
-    
-#     if [[ $(date -r $sourceAppDir$backupTarball +%d-%m-%Y) -eq $today ]]; then
-#       echo "[OK] >>> backup is timestamped today"
-#       echo "[PROCESSING] > Moving files to archive directory..."
-#       set -x
-#       mv $sourceAppDir*.tar $targetAppDir
-#       mv $sourceSecretDir*tgz $targetSecretDir
-#       set +x
-#       echo "> [DONE]"    
-#     else
-#       echo "[WARNING] >>> Backup file is not timestamped today"
-#     fi
-#   else
-#     echo "[ERROR] >>> more than 1 backup APP file found !!!"
-#     exit 1
-#   fi
-# else
-#   echo "[ERROR] >>> backup file not found !!!"
-#   exit 1
-# fi
-
-# echo "[PROCESSING] > Setting proper permissions on archive files..."
-# set -x
-# chown -R fred:fred $targetAppDir*
-# chown -R fred:fred $targetSecretDir*
-# set +x
-# echo "> [DONE]"
-
-# echo "[CHECKING] > Required number of backup files..."
-# if [[ $(find $targetAppDir -maxdepth 1 -type f 2> /dev/null | wc -l) -gt 5 ]]; then
-#   echo "[OK] >>> more than 5 backup files found"
-#   echo "[PROCESSING] > deleting old backups..."
-#   set -x
-#   find $targetAppDir* $retention | xargs -d '\n' -tI "$" rm "$"
-#   find $targetSecretDir* $retention | xargs -d '\n' -tI "$" rm "$"
-#   set +x
-#   echo "> [DONE]"
-# else
-#   echo "[WARNING] >>> not enough backup files found. Not deleting files."
-# fi
-
-
-# echo "[ENDING] > SCRIPT IS ENDING SUCCESSFULLY $(date +%d-%m-%Y_%H:%M:%S)"
-
-# #####################################################################################
