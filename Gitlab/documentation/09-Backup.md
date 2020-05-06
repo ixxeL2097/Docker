@@ -60,31 +60,21 @@ To automate your backup process, you have 2 major options.
 - Automate process **inside container**
 - Automate process on the **host**
 
-In this case we choose to automate process on the host to have better control over files location, permissions and backup rotation. We need to use bash script and crontab to make this working properly.
+In this case we choose to automate process on the host to have better control over files location, permissions and backup retention. We need to use **bash script** and **crontab** to make this working properly.
 
 You can find a script to run on your host machine here [backup script](../scripts/backup-script.sh)
 
-This script do the following:
+To explain how this script is working, refer to the following diagrams:
 
-- create **application data** backup in gitlab specified directory
-- create **configuration data** backup in gitlab specified directory
-- move application & configuration backups from initial directory to another directory
-- change ownership of these backups
-- delete backups older than a specified amount of time
+<p align="center">
+  <img src="../pictures/gitlab-backup-diagram.png" width="60%" height="60%">
+</p>
 
-```mermaid
-graph LR
-    A[docker_image_list_add] -->|add| B(Load Parameters)
-    C[docker_image_list_remove] -->|remove| B
-    D[docker_image_list_namespace] -->|retrieve| B
-    B --> E(ibmcloud registry login)
-    E --> F(skopeo pull images)
-    F --> G(skopeo push images)
-    G --> H{Validate images security with VA}
-    H -->|relevant| I[Usable into integration environment]
-    H -->|not relevant| J[need mitigation]
-```
+This picture describes how the script is triggered by crontab on the VM and what actions are realized. To get a more detailed view over what is done by the script, please reger to the following flow diagram:
 
+<p align="center">
+  <img src="../pictures/mermaid-backup-script.png" width="60%" height="60%">
+</p>
 
 
 ### Restore
