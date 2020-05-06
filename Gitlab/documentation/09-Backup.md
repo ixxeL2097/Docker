@@ -73,7 +73,7 @@ To explain how this script is working, refer to the following diagrams:
 This picture describes how the script is triggered by crontab on the VM and what actions are realized. To get a more detailed view over what is done by the script, please reger to the following flow diagram:
 
 <p align="center">
-  <img src="../pictures/mermaid-backup-script.png" width="100%" height="100%">
+  <img src="../pictures/mermaid-backup-script.png" width="120%" height="120%">
 </p>
 
 
