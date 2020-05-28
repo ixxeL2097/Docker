@@ -87,10 +87,17 @@ ex: GitlabAdmins
 Once everything is configured, you have to log in a first time with some users inside the ```base``` OU parameter in order for gitlab to be aware of those users.
 Then you can log in to gitlab and configure access for these users.
 
+if for some reason, your want to force synchronization you can always execute following command inside gitlab container:
 
-Synchronizing groups
+```bash
+gitlab-rails runner 'LdapGroupSyncWorker.perform_async'
+```
 
-https://docs.gitlab.com/ee/administration/auth/how_to_configure_ldap_gitlab_ee/#group-sync
+It will help for example to refresh admin group list inside gitlab.
+
+You can see documentation about it on this link:
+
+- https://docs.gitlab.com/ee/administration/auth/how_to_configure_ldap_gitlab_ee/#group-sync
 
 
 -----------------------------------------------------------------------------------------------------------------------------------
