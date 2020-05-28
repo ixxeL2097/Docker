@@ -1,4 +1,4 @@
-[Retour menu principal](../README.md)
+[Main menu](../README.md)
 
 ## 5. LDAP configuration
 
@@ -35,19 +35,19 @@ Manager DN: CN=Jfrog_ldap,CN=Users,DC=example,DC=com
 ```
 
 <p align="center">
-  <img src="../pictures/LDAP-settings.png" width="80%" height="80%">
+  <img src="../pictures/LDAP-settings.png" width="50%" height="50%">
 </p>
 
 You can also specify LDAP group synchronisation with JFrog instance. Under LDAP menu, hit the New LDAP Group Setting button and fill the information as per below:
 
 <p align="center">
-  <img src="../pictures/group-sync.png" width="80%" height="80%">
+  <img src="../pictures/group-sync.png" width="50%" height="50%">
 </p>
 
 You can then search for groups by cliking on the synchronization LDAP Groups magnifying glass. Select the groups you want and click on the import button:
 
 <p align="center">
-  <img src="../pictures/import-group.png" width="80%" height="80%">
+  <img src="../pictures/import-group.png" width="50%" height="50%">
 </p>
 
 Then save.
@@ -56,6 +56,6 @@ In the ```Identity and Access``` menu, you should see the imported group under `
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
-[Retour menu principal](../README.md)
+[Main menu](../README.md)
 
-[Suivant](06-Create-and-use-repo.md)
+[Next](06-Create-and-use-repo.md)

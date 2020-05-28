@@ -1,4 +1,4 @@
-[Retour menu principal](../README.md)
+[Main menu](../README.md)
 
 ## 6. Create and use repo
 
@@ -35,16 +35,20 @@ If you prefer to use CLI, click on ```Set Me Up``` instead of ```Deploy``` to ge
 To upload a file, use the following command:
 
 ```bash
-curl -u<USERNAME>:<PASSWORD> -T <PATH_TO_FILE> "https://JFROG-FQDN:<PORT>/artifactory/<YOUR-REPO>/<TARGET_FILE_PATH>"
+curl -u <USERNAME>:<PASSWORD> -T <PATH_TO_FILE> "https://JFROG-FQDN:<PORT>/artifactory/<YOUR-REPO>/<TARGET_FILE_PATH>"
 ```
 
 To download a file, use the following command:
 
 ```bash
-curl -u<USERNAME>:<PASSWORD> -O "https://JFROG-FQDN:<PORT>/artifactory/<YOUR-REPO>/<TARGET_FILE_PATH>"
+curl -u <USERNAME>:<PASSWORD> -O "https://JFROG-FQDN:<PORT>/artifactory/<YOUR-REPO>/<TARGET_FILE_PATH>"
 ```
 Files from repositories are stored in the ```${JFROG_HOME}/var/data/artifactory/filestore``` directory.
 
+**CAUTION !!** If you need to open access to your Jfrog server, please keep in mind that you should open ports for the Nginx proxy and API access as well (443 and 8081) to have a backup solution to download artefacts in case your proxy is down.
+
 ---------------------------------------------------------------------------------------------------------------------------------
 
-[Retour menu principal](../README.md)
+[Main menu](../README.md)
+
+[Next](07-Using-API.md)
