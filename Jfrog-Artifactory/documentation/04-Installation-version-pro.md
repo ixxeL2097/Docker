@@ -136,16 +136,38 @@ Then execute ```docker-compose stop``` and ```docker-compose start```. You can m
 You can also automatically generate NGINX configuration file thanks to the Jfrog WEB UI. Connect on Jfrog Artifactory UI and navigate to **Administration** menu, **Artifactory** section, **General/HTTP Settings** parameter .
 
 <p align="center">
-  <img src="../pictures/jfrog-proxy-menu.png" width="80%" height="80%">
+  <img src="../pictures/jfrog-proxy-menu.png" width="30%" height="30%">
 </p>
 
 Configure NGINX Reverse Proxy as you want and check the configuration file.
 
 <p align="center">
-  <img src="../pictures/jfrog-proxy-config.png" width="80%" height="80%">
+  <img src="../pictures/jfrog-proxy-config.png" width="50%" height="50%">
 </p>
 
 You can now copy/paste configuration file in the ```$JFROG_HOME/var/data/nginx/conf.d``` directory and stop and start the instance.
+
+### HealthCheck
+
+You can also configure HealthCheck for NGINX ReverseProxy. The thing we want to check is that Artifactory API is actually available through NGINX Reverse Proxy. To check this, you can add the following lines :
+
+```yaml
+    healthcheck:
+      test: ["CMD", "curl", "-kf", "https://localhost:443/artifactory/api/system/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+```
+
+This check will set the container as unhealthy if the connection to Artifactory API is unavailable. Keep in mind that if Artifactory fails, then NGINX will also fail. But there is no need to check that the NGINX process is working properly.
+
+You can verify healthcheck status with the following commands :
+
+```
+docker inspect --format "{{json .State.Health }}" <CONTAINER-NAME> | jq
+docker inspect --format "{{json .State.Health }}" <CONTAINER-NAME> | jq '.Log[].Output'
+```
+
 
 ---------------------------------------------------------------------------------------------------------------------------------
 

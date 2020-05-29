@@ -104,6 +104,39 @@ Launch the application :
 docker-compose up -d
 ```
 
+### HealthCheck
+
+Healthchecks can be useful to monitor your containers. You can add HealthCheck to Artifactory and PostgreSQL docker-compose.
+For Artifactory, just add these lines to the docker-compose.yaml file :
+
+```yaml
+healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/artifactory/api/system/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+```
+
+You can obviously tweak values for interval, timeout and retries.
+
+For PostgreSQL, just add these lines :
+
+```yaml
+healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+```
+
+You can verify healthcheck status with the following commands :
+
+```
+docker inspect --format "{{json .State.Health }}" <CONTAINER-NAME> | jq
+docker inspect --format "{{json .State.Health }}" <CONTAINER-NAME> | jq '.Log[].Output'
+```
+
+
 ---------------------------------------------------------------------------------------------------------------------------------
 
 [Main menu](../README.md)

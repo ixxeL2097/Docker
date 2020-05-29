@@ -16,6 +16,11 @@ services:
     networks:
      - jfrog
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
     logging:
       driver: json-file
       options:
@@ -36,7 +41,12 @@ services:
      - jfrog
     restart: always
     depends_on:
-    - postgres
+     - postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/artifactory/api/system/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
     ulimits:
       nproc: 65535
       nofile:
@@ -59,6 +69,11 @@ services:
     container_name: nginxjfrog
     depends_on:
      - artifactory
+    healthcheck:
+      test: ["CMD", "curl", "-kf", "https://localhost:443/artifactory/api/system/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
     network_mode: service:artifactory
     volumes:
      - ${ROOT_DATA_DIR}/var/data/nginx:/var/opt/jfrog/nginx

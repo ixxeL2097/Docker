@@ -143,4 +143,4 @@ If you are using a Reverse Proxy like NGINX, you can directly send requests to A
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
-[Retour menu principal](../README.md)
+[Main menu](../README.md)
