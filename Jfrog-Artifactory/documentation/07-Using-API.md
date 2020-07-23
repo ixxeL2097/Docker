@@ -67,6 +67,11 @@ curl -u admin:password -O "http://localhost:8081/artifactory/<REPO>/<FILENAME>"
 curl -u admin:password -X PUT "http://localhost:8081/artifactory/<REPO>/<FILENAME>" -T <FILENAME>
 ```
 
+**Delete artefact**
+```
+curl -u admin:password -X DELETE http://localhost:8081/artifactory/<REPO>/<FILENAME>"
+```
+
 ### API with Reverse Proxy
 
 If you are using a Reverse Proxy like NGINX, you can directly send requests to API through the Reverse Proxy by using its URL path.
@@ -139,6 +144,10 @@ If you are using a Reverse Proxy like NGINX, you can directly send requests to A
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   642  100   642    0     0   4201      0 --:--:-- --:--:-- --:--:--  4223
+```
+
+```console
+[root@workstation ~ ]$ curl -k -u admin:password -X DELETE "https://localhost3443/artifactory/TESTREPO/TestREADME.md"
 ```
 
 ---------------------------------------------------------------------------------------------------------------------------------

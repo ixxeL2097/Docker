@@ -63,7 +63,6 @@ MOUNT_PATH=/srv
 ## PORTS
 HOST_SSH_PORT=2222
 HOST_HTTP_PORT=2280
-HOST_HTTPS_PORT=2443
 ```
 fichier docker-compose.yml:
 ```yml
@@ -76,7 +75,7 @@ services:
     hostname: '${HOSTNAME}'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url '${EXT_URL}:443'
+        external_url '${EXT_URL}:2443'
         letsencrypt['enable'] = false 
         nginx['ssl_certificate'] = "/etc/gitlab/ssl/${COMMON_NAME}.crt"
         nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/${COMMON_NAME}.key"
@@ -85,7 +84,7 @@ services:
         gitlab_rails['env'] = {"SSL_CERT_FILE" => "/etc/gitlab/trusted-certs/server.crt"}
     ports:
       - '${HOST_HTTP_PORT}:80'
-      - '${HOST_HTTPS_PORT}:443'
+      - '2443:2443'
       - '${HOST_SSH_PORT}:22'
     volumes:
       - '${MOUNT_PATH}/gitlab/config:/etc/gitlab'
@@ -95,6 +94,9 @@ services:
       - ./server.crt:/etc/gitlab/ssl/${COMMON_NAME}.crt
       - ./server.key:/etc/gitlab/ssl/${COMMON_NAME}.key
 ```
+
+Si vous changez le port HTTPS, il est important de mapper le port VM avec le port container (ex: 2443 host -> 2433 container)
+
 Voici les changements:
 
 - L'URL change de HTTP vers HTTPS.

@@ -8,9 +8,3 @@ To install Gitlab properly, download the provided ```docker-compose.yml``` file 
 
 
 [Retour menu principal](../README.md)
-
-creer repo
-charger art
-telecharger art
-
-pluguer 30min ac JM pr jfrog

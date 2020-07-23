@@ -7,7 +7,7 @@ services:
     hostname: '${HOSTNAME}'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url '${EXT_URL}:443'
+        external_url '${EXT_URL}:2443'
         gitlab_rails['time_zone'] = 'Europe/Paris'
         gitlab_rails['gitlab_shell_ssh_port'] = ${HOST_SSH_PORT}
         gitlab_rails['license_file'] = '${LICENSE_PATH}'
@@ -74,7 +74,7 @@ services:
         grafana['admin_password'] = '${GRAFANA_PASSWD}'
     ports:
       - '${HOST_HTTP_PORT}:80'
-      - '${HOST_HTTPS_PORT}:443'
+      - '2443:2443'
       - '${HOST_SSH_PORT}:22'
     volumes:
       - '${MOUNT_PATH}/config:/etc/gitlab'
