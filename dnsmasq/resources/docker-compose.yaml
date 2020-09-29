@@ -1,0 +1,31 @@
+version: '3'
+services:
+  dnsmasq:
+    image: jpillora/dnsmasq
+    container_name: dnsmasq
+    restart: always
+    environment:
+     - HTTP_USER=${HTTP_USER}
+     - HTTP_PASS=${HTTP_PASS}
+    ports:
+      - 53:53/udp
+      - 53:53/tcp
+      - 5380:8080
+    volumes:
+     - ${DATA_DIR}/dnsmasq.conf:/etc/dnsmasq.conf
+     - /etc/localtime:/etc/localtime:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    networks:
+     - dnsmasq
+networks:
+  dnsmasq:
+    driver: bridge
+    driver_opts:
+      #com.docker.network.bridge.enable_ip_masquerade: "true"
+      #com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
+      com.docker.network.bridge.name: "docker1"
+      com.docker.network.bridge.mtu: "1500"
